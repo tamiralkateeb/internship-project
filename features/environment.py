@@ -31,3 +31,11 @@ def after_step(context, step):
 
 def after_scenario(context, feature):
     context.driver.quit()
+# features/environment.py
+
+def before_all(context):
+    context.browser = webdriver.Chrome()
+    context.browser.implicitly_wait(10)  #
+
+def after_all(context):
+    context.browser.quit()
