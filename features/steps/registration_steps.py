@@ -1,9 +1,10 @@
 from behave import given, when, then
 from app.application import Application
 
+
 @given('the user is on the registration page')
 def step_given_user_on_registration_page(context):
-    context.app = Application(context.browser)
+    context.app = Application(context.driver)
     context.app.open_page("https://soft.reelly.io/sign-up")
 
 @when('the user enters "{text}" into the Full Name field')
