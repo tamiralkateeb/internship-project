@@ -1,17 +1,16 @@
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from app.application import Application
 
+
 @pytest.fixture
 def browser():
-    # Ensure the correct version of ChromeDriver is installed and used
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
+    driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.implicitly_wait(10)
     yield driver
     driver.quit()
+
 
 def test_user_registration(browser):
     app = Application(browser)

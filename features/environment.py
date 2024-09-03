@@ -1,59 +1,41 @@
-import os
+# /features/environment.py
 
+import os
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from app.application import Application
 
-def browser_init(context):
-    """
-    Initialize the browser for the test.
-    :param context: Behave context
-    """
+def browser_init(context, scenario_name):
+    BROWSERSTACK_USERNAME = 'tamiralkateeb_R3AjZD'
+    BROWSERSTACK_ACCESS_KEY = 'CqXTKNqMkY25k7vdqWmy'
 
-    chrome_options = ChromeOptions()
-    chrome_options.add_argument('headless')
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--window-size=1920x1080")
-    chrome_service = Service(ChromeDriverManager().install())
-    context.driver = webdriver.Chrome(
-        options=chrome_options,
-        service=chrome_service
-    )
+    url = f'http://{BROWSERSTACK_USERNAME}:{BROWSERSTACK_ACCESS_KEY}@hub-cloud.browserstack.com/wd/hub'
 
-    firefox_options = FirefoxOptions()
-    firefox_options.add_argument('headless')
-    firefox_options.add_argument("--window-size=1920x1080")
-    firefox_service = FirefoxService(GeckoDriverManager().install())
-    context.driver = webdriver.Firefox(service=firefox_service, options=firefox_options)
+    options = ChromeOptions()
+    bstack_options = {
+        "os": "Windows",
+        "osVersion": "10",
+        'browserName': 'Chrome',
+        'sessionName': scenario_name
+
+
+    }
+    options.set_capability('bstack:options', bstack_options)
+    context.driver = webdriver.Remote(command_executor=url, options=options)
 
     context.driver.maximize_window()
     context.driver.implicitly_wait(4)
 
-    print("Running in headless mode: ", "--headless" in chrome_options.arguments)
+    context.app = Application(context.driver)
 
 def before_scenario(context, scenario):
-    print('\nStarted scenario: ', scenario.name)
-    browser_init(context)
-
-def before_step(context, step):
-    print('\nStarted step: ', step)
-
-def after_step(context, step):
-    if step.status == 'failed':
-        print('\nStep failed: ', step)
+    browser_init(context, scenario.name)
 
 def after_scenario(context, scenario):
-    context.driver.quit()
-
-# features/environment.py
-
-def before_all(context):
-    context.browser = webdriver.Chrome()
-    context.browser.implicitly_wait(10)
-
-def after_all(context):
-    context.browser.quit()
+    if hasattr(context, 'driver'):
+        context.driver.quit()

@@ -1,3 +1,5 @@
+# /pages/registration_page.py
+
 from selenium.webdriver.common.by import By
 from pages.basse_Page import BasePage
 

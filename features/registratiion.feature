@@ -1,3 +1,4 @@
+
 Feature: User Registration
 
 Scenario: User can enter information into the input fields on the registration page
