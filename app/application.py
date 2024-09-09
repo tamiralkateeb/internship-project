@@ -5,7 +5,7 @@ from pages.registration_page import RegistrationPage
 class Application:
     def __init__(self, driver):
         self.driver = driver
-        self.registration_page = RegistrationPage(driver)  # Initialize RegistrationPage here
+        self.registration_page = RegistrationPage(driver)
 
     def open_page(self, url):
         self.registration_page.open_page(url)

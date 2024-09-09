@@ -6,7 +6,7 @@ from app.application import Application
 
 @pytest.fixture
 def browser():
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver = webdriver.Chrome()
     driver.implicitly_wait(10)
     yield driver
     driver.quit()
